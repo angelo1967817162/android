@@ -3,10 +3,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
@@ -14,13 +16,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.CoursUiState
 import com.example.myapplication.mooveScreen
+import com.example.myapplication.ui.CoursViewModel
 import com.example.myapplication.ui.Datasource
+
 
 //@Composable
 //fun mooveApp(){
@@ -59,9 +64,18 @@ fun mooveApp() {
                 modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(Alignment.Center),
-                navController1 = Datasource.retourneListeCours(),
+//pokeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
                 navController = navController
             )
+        }
+//            ListePokemon(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .wrapContentSize(Alignment.Center),
+////pokeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+//                navController = navController
+//            )
+//        }
         }
     }
     //@Composable
@@ -93,24 +107,66 @@ fun mooveApp() {
 //        navController.navigate(mooveScreen.Login.name){
 //            popUpTo(mooveScreen.Start.name) { inclusive = false }
 //        }
-   }
 
+
+//@Composable
+//fun ListePokemon(
+//    modifier: Modifier = Modifier,
+//    pokeViewModel: PokeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+//    navController: NavHostController = rememberNavController()
+//){
+//    val listePokemon by pokeViewModel.pokeUi.collectAsState(initial = emptyList())
+//    Column(
+//        modifier = modifier.fillMaxSize(),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ){
+//        Text(text = "Liste des Pokémon", modifier = Modifier.align(Alignment.CenterHorizontally))
+//        LazyColumn {
+//            items(listePokemon) { pokemon ->
+//                Text(text = pokemon.name)
+//            }
+//        }
+
+
+
+
+
+//@Composable
+//fun ListeCours(
+//    modifier: Modifier,
+//    navController1: List<CoursUiState>,
+//    navController: NavHostController
+//) {
+//    ListeCours(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .wrapContentSize(Alignment.Center),
+//        Datasource.retourneListeCours(),
+//        navController=navController
+//    )
+//val listeCours = Datasource.retourneListeCours()
+//    LazyColumn(modifier = modifier.fillMaxSize()) {
+//        items(listeCours) { cours ->
+//            Text(text = cours.nom)
+//        }
+//    }
+//}
 @Composable
 fun ListeCours(
-    modifier: Modifier,
-    navController1: List<CoursUiState>,
-    navController: NavHostController
-) {
-    ListeCours(
-        modifier = Modifier
-            .fillMaxSize()
-            .wrapContentSize(Alignment.Center),
-        Datasource.retourneListeCours(),
-        navController=navController
-    )
-    LazyColumn(modifier = modifier.fillMaxSize()) {
-        items(listeCours) { cours ->
-            Text(text = cours.nom)
+    modifier: Modifier = Modifier,
+    coursViewModel: CoursViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    navController: NavHostController = rememberNavController()
+){
+    val listePokemon by coursViewModel.coursUi.collectAsState()
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Text(text = "Liste des cours", modifier = Modifier.align(Alignment.CenterHorizontally))
+        LazyColumn {
+            items(listeCours) { cours ->
+                Text(text = " ${cours.username}")
+            }
         }
     }
 }
