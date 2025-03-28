@@ -1,11 +1,13 @@
 package com.example.myapplication.ui
 
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.CoursUiState
-
 import com.example.myapplication.service.CoursApi
+
+
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,10 +22,19 @@ class CoursViewModel : ViewModel() {
     }
     fun getCoursNames() {
         viewModelScope.launch {
-            val response = CoursApi.retrofitService.getCoursList()
-            _coursUi.value = response.results.map { cours ->
-                CoursUiState( name = cours.username)
+            try {
+                val response = CoursApi.retrofitService.getCoursList()
+                println("response:$response")
+                _coursUi.value = response.map { cours ->
+                     CoursUiState(
+                         id = cours.id,
+                         nom = cours.nom,
+                         description = cours.description
+                     )
+                }
+            } catch (e: Exception) {
+                Log.e("CoursViewModel", "Error fetching cours names", e)
             }
         }
-    }
+   }
 }

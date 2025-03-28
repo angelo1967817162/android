@@ -1,8 +1,10 @@
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -16,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -60,18 +63,18 @@ fun mooveApp() {
             )
         }
         composable(route = mooveScreen.AfficherCours.name) {
+
+            val coursViewModel:CoursViewModel= viewModel()
             ListeCours(
                 modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(Alignment.Center),
-//pokeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+               // Datasource.retourneListeCours(),
+                coursViewModel,
                 navController = navController
             )
         }
-//            ListePokemon(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .wrapContentSize(Alignment.Center),
+
 ////pokeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
 //                navController = navController
 //            )
@@ -96,81 +99,50 @@ fun mooveApp() {
 ////        Text("Consulter les cours")
 ////    }
 //}}
-//
-//
-//
-//@Composable
-//fun PageAccueil(modifier: Modifier=Modifier,
-//                navController: NavHostController= rememberNavController()
-//){
-//    Button(onClick = {
-//        navController.navigate(mooveScreen.Login.name){
-//            popUpTo(mooveScreen.Start.name) { inclusive = false }
-//        }
 
-
-//@Composable
-//fun ListePokemon(
-//    modifier: Modifier = Modifier,
-//    pokeViewModel: PokeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-//    navController: NavHostController = rememberNavController()
-//){
-//    val listePokemon by pokeViewModel.pokeUi.collectAsState(initial = emptyList())
-//    Column(
-//        modifier = modifier.fillMaxSize(),
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ){
-//        Text(text = "Liste des Pokémon", modifier = Modifier.align(Alignment.CenterHorizontally))
-//        LazyColumn {
-//            items(listePokemon) { pokemon ->
-//                Text(text = pokemon.name)
-//            }
-//        }
-
-
-
-
-
-//@Composable
-//fun ListeCours(
-//    modifier: Modifier,
-//    navController1: List<CoursUiState>,
-//    navController: NavHostController
-//) {
-//    ListeCours(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .wrapContentSize(Alignment.Center),
-//        Datasource.retourneListeCours(),
-//        navController=navController
-//    )
-//val listeCours = Datasource.retourneListeCours()
-//    LazyColumn(modifier = modifier.fillMaxSize()) {
-//        items(listeCours) { cours ->
-//            Text(text = cours.nom)
-//        }
-//    }
-//}
 @Composable
 fun ListeCours(
     modifier: Modifier = Modifier,
-    coursViewModel: CoursViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-    navController: NavHostController = rememberNavController()
+    //listeCours: List<CoursUiState>,
+    coursViewModel: CoursViewModel,
+    navController: NavHostController = rememberNavController(),
 ){
-    val listePokemon by coursViewModel.coursUi.collectAsState()
+    val listeCours by coursViewModel.coursUi.collectAsState()
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Text(text = "Liste des cours", modifier = Modifier.align(Alignment.CenterHorizontally))
+        Text(text = "Liste des Cours")
         LazyColumn {
-            items(listeCours) { cours ->
-                Text(text = " ${cours.username}")
+            items(listeCours.size) { index ->
+                val cours = listeCours[index]
+                Text(text = " ${cours.nom}")
+                Text(text = " ${cours.description}")
+//               Text(text = cours.email)
+//              Text(text = cours.password)
+//               Text(text = cours.salaire.toString())
             }
         }
     }
-}
 
+
+
+//    LazyColumn(modifier = modifier.fillMaxSize()) {
+//        items(listeCours.size) { index ->
+//            val cours = listeCours[index]
+//            Card(modifier = Modifier.padding(8.dp)) {
+//                Column(modifier = Modifier.padding(8.dp)) {
+//
+//                    Text(text = cours.username)
+//                    Text(text = cours.email)
+//                    Text(text = cours.password)
+//                    Text(text = cours.salaire.toString())
+//
+//                }
+//            }
+//        }
+//    }
+}
 
 @Composable
     fun PageAccueil(
@@ -180,6 +152,16 @@ fun ListeCours(
 
 //        val coursViewModel: CoursViewModel = viewModel()
 //        val coursUiState by coursViewModel.uiState.collectAsState()
+    Column (
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Button(onClick = { navController.navigate(mooveScreen.AfficherCours.name) {
+
+            popUpTo(mooveScreen.Start.name) { inclusive = false }
+        } }) {
+            Text("Consulter les cours")
+        }
 
         Button(onClick = {
             navController.navigate(mooveScreen.Login.name) {
@@ -190,6 +172,7 @@ fun ListeCours(
             Text("Naviguer vers Login")
         }
     }
+}
 
 
 
